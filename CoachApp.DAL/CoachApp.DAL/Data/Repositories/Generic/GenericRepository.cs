@@ -1,7 +1,6 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace CoachApp.DAL.Data.Repositories;
+namespace CoachApp.DAL.Data.Repositories.Generic;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {

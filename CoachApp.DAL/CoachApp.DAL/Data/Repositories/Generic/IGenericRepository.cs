@@ -1,4 +1,4 @@
-﻿namespace CoachApp.DAL.Data.Repositories;
+﻿namespace CoachApp.DAL.Data.Repositories.Generic;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
