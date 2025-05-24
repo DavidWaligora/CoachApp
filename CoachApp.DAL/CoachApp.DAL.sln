@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.DAL", "CoachApp.DAL\CoachApp.DAL.csproj", "{D9817A76-69D0-4FA6-8470-F8A1A8021B9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9817A76-69D0-4FA6-8470-F8A1A8021B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9817A76-69D0-4FA6-8470-F8A1A8021B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9817A76-69D0-4FA6-8470-F8A1A8021B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9817A76-69D0-4FA6-8470-F8A1A8021B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {910441D7-C9BE-4C58-81AC-4984E5EE7234}
+	EndGlobalSection
+EndGlobal
