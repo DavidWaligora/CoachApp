@@ -10,4 +10,5 @@ public class Feeling
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
     public string FeelingName { get; set; } = null!;
+    public List<FeelingForActivity> FeelingsForActivities { get; set; } = new List<FeelingForActivity>();
 }

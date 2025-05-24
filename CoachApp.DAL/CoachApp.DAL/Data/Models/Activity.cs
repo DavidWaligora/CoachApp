@@ -27,7 +27,7 @@ public class Activity
     public DateTime EndDate { get; set; }
     public bool MustComplete { get; set; } = false;
     public bool? Completed { get; set; }
-    public int FeedbackID { get; set; }
-    public ActivityFeedback Feedback { get; set; } = null!;
+    public int ActivityFeedbackID { get; set; }
+    public ActivityFeedback ActivityFeedback { get; set; } = null!;
     public List<FeelingForActivity> FeelingsForActivity { get; set; } = new List<FeelingForActivity>();
 }

@@ -10,4 +10,5 @@ public class ActivityType
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
     public string ActivityName { get; set; } = null!;
+    public List<Activity> Activities { get; set; } = new List<Activity>();
 }
