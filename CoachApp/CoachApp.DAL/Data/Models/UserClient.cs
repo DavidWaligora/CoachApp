@@ -23,5 +23,5 @@ public class UserClient
     [Precision(0)]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Activity> Activities { get; set; } = new List<Activity>();
-    public List<FocusPointPeriod> FocusPointPeriods { get; set; } = new List<FocusPointsPeriod>();
+    public List<FocusPointPeriod> FocusPointPeriods { get; set; } = new List<FocusPointPeriod>();
 }

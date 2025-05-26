@@ -7,7 +7,8 @@ namespace CoachApp.DAL.Data
     {
         public CoachAppContext(DbContextOptions<CoachAppContext> options) : base(options)
         { }
-
+        // DbSet properties for your entities can be added here, e.g.:
+        // public DbSet<YourEntity> YourEntities { get; set; }
         public DbSet<Activity> Activity { get; set; } = default!;
         public DbSet<ActivityFeedback> ActivityFeedback { get; set; } = default!;
         public DbSet<ActivityType> ActivityType { get; set; } = default!;
@@ -107,7 +108,6 @@ namespace CoachApp.DAL.Data
 
 
         }
-        // DbSet properties for your entities can be added here, e.g.:
-        // public DbSet<YourEntity> YourEntities { get; set; }
+
     }
 }

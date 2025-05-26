@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoachApp.DAL.Controllers
+namespace CoachApp.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

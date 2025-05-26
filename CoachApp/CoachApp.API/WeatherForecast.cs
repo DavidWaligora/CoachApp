@@ -1,4 +1,4 @@
-namespace CoachApp.DAL
+namespace CoachApp.API
 {
     public class WeatherForecast
     {
