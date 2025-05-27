@@ -26,6 +26,7 @@ public class User
     [StringLength(20)]
     public string? PhoneNumber { get; set; }
     public List<UserClient> UserClients { get; set; } = new List<UserClient>();
+    public List<UserClient> ClientUserClients { get; set; } = new List<UserClient>();
     public List<UserClientFollowUp> UserClientFollowUps { get; set; } = new List<UserClientFollowUp>();
 
 }

@@ -25,17 +25,19 @@ namespace CoachApp.DAL.Data
             base.OnModelCreating(modelBuilder);
             // model config
 
-            modelBuilder.Entity<Activity>().ToTable("Activity"); // ok
-            modelBuilder.Entity<ActivityFeedback>().ToTable("ActivityFeedback"); // ok
-            modelBuilder.Entity<ActivityType>().ToTable("ActivityType"); // ok
-            modelBuilder.Entity<Feeling>().ToTable("Feeling"); // ok
-            modelBuilder.Entity<FeelingForActivity>().ToTable("FeelingForActivity"); // ok
-            modelBuilder.Entity<FocusPoint>().ToTable("FocusPoint"); // ok
-            modelBuilder.Entity<FocusPointPeriod>().ToTable("FocusPointsPeriod"); // ok
-            modelBuilder.Entity<User>().ToTable("User"); // ok
-            modelBuilder.Entity<UserClient>().ToTable("UserClient"); // ok
+            modelBuilder.Entity<Activity>().ToTable("Activity");
+            modelBuilder.Entity<ActivityFeedback>().ToTable("ActivityFeedback");
+            modelBuilder.Entity<ActivityType>().ToTable("ActivityType");
+            modelBuilder.Entity<Feeling>().ToTable("Feeling");
+            modelBuilder.Entity<FeelingForActivity>().ToTable("FeelingForActivity");
+            modelBuilder.Entity<FocusPoint>().ToTable("FocusPoint");
+            modelBuilder.Entity<FocusPointPeriod>().ToTable("FocusPointsPeriod");
+            modelBuilder.Entity<User>().ToTable("User")
+                .HasIndex(x=>x.UserName)
+                .IsUnique(); // ok
+            modelBuilder.Entity<UserClient>().ToTable("UserClient");
             modelBuilder.Entity<UserRole>().ToTable("UserRole");
-            modelBuilder.Entity<UserClientFollowUp>().ToTable("UserClientFollowUp"); // ok
+            modelBuilder.Entity<UserClientFollowUp>().ToTable("UserClientFollowUp");
 
 
             // Additional configurations can be added here, such as relationships, indexes, etc.
@@ -44,12 +46,14 @@ namespace CoachApp.DAL.Data
             modelBuilder.Entity<UserClient>()
                 .HasOne(uc => uc.User)
                 .WithMany(u => u.UserClients)
-                .HasForeignKey(uc => uc.UserID);
+                .HasForeignKey(uc => uc.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserClient>()
                 .HasOne(uc => uc.Client)
-                .WithMany(c => c.UserClients)
-                .HasForeignKey(uc => uc.ClientID);
+                .WithMany(c => c.ClientUserClients)
+                .HasForeignKey(uc => uc.ClientID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Activity>()
                 .HasOne(a=>a.ActivityType)

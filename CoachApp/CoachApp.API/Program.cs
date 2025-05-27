@@ -1,6 +1,11 @@
+using CoachApp.DAL.Data;
+using CoachApp.Services; // Ensure this namespace is correct based on your project structure
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Database services registration
+builder.Services.AddDatabaseServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,5 +26,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// DatabaseProvider registration
+app.Services.AddDatabaseServicesProvider();
 
 app.Run();
