@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: dotnet build ./CoachApp/CoachApp.API.sln --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ./CoachApp/CoachApp.API.sln --no-build --verbosity normal
