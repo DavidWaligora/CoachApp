@@ -1,4 +1,5 @@
 ﻿using CoachApp.DAL.Data;
+using CoachApp.DAL.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ public static class DependencyInjection
         {
             var context = scope.ServiceProvider.GetRequiredService<CoachAppContext>();
             context.Database.EnsureCreated();
+            DbSeeder.SeedDatabase(context);
         }
         return serviceProvider;
     }

@@ -28,5 +28,6 @@ public class User
     public List<UserClient> UserClients { get; set; } = new List<UserClient>();
     public List<UserClient> ClientUserClients { get; set; } = new List<UserClient>();
     public List<UserClientFollowUp> UserClientFollowUps { get; set; } = new List<UserClientFollowUp>();
+    public List<UserToken> UserTokens { get; set; } = new List<UserToken>();
 
 }
