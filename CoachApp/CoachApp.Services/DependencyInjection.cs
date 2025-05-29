@@ -1,5 +1,7 @@
 ﻿using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Extensions;
+using CoachApp.DAL.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
