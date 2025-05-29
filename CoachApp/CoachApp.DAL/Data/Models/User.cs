@@ -9,31 +9,35 @@ public class User : IdentityUser<int>
     [Key]
     public int UserID { get; set; }
     [PersonalData]
+    [Required]
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
     [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
-    public string FirstName { get; set; } = null!;
+    public required string FirstName { get; set; } = null!;
     [PersonalData]
+    [Required]
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
     [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
-    public string LastName { get; set; } = null!;
+    public required string LastName { get; set; } = null!;
+    [Required]
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
     [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
-    public string UserName { get; set; } = null!;
+    public required override string? UserName { get; set; } = null!;
     [PersonalData]
+    [Required]
     [Column(TypeName = "VARCHAR")]
     [EmailAddress]
     [StringLength(255)]
     [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
-    public string Email { get; set; } = null!;
+    public required override string? Email { get; set; } = null!;
     [PersonalData]
     [Column(TypeName = "VARCHAR")]
     [Phone]
     [StringLength(20)]
     [MaxLength(20, ErrorMessage = "Cannot exceed 20 characters!")]
-    public string? PhoneNumber { get; set; }
+    public override string? PhoneNumber { get; set; }
     public List<UserClient> UserClients { get; set; } = new List<UserClient>();
     public List<UserClient> ClientUserClients { get; set; } = new List<UserClient>();
     public List<UserClientFollowUp> UserClientFollowUps { get; set; } = new List<UserClientFollowUp>();
