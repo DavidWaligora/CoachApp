@@ -1,7 +1,10 @@
 using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Models;
 using CoachApp.Services;
-using Microsoft.AspNetCore.Identity; // Ensure this namespace is correct based on your project structure
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text; // Ensure this namespace is correct based on your project structure
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,32 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<CoachAppContext>()
                 .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    // Fix for CS8604: Ensure the configuration values are not null before using them.
+    var jwtKey = builder.Configuration["Jwt:Key"];
+    if (string.IsNullOrEmpty(jwtKey))
+    {
+        throw new InvalidOperationException("Jwt:Key configuration is missing or empty.");
+    }
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer configuration is missing."),
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("Jwt:Audience configuration is missing."),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
 
 var app = builder.Build();
 
