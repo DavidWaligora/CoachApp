@@ -17,9 +17,11 @@ public class Activity
 
     [Column(TypeName = "VARCHAR")]
     [StringLength(255)]
+    [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
     public string ActivityName { get; set; } = null!;
     [Column(TypeName = "VARCHAR")]
     [StringLength(255)]
+    [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
     public string Description { get; set; } = null!;
     [Precision(0)]
     public DateTime StartDate { get; set; } = DateTime.Now;

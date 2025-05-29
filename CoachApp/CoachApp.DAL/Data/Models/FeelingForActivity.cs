@@ -14,7 +14,7 @@ public class FeelingForActivity
     public Activity Activity { get; set; } = null!;
     public int FeelingID { get; set; }
     public Feeling Feeling { get; set; } = null!;
-    [MaxLength(5)]
-    [MinLength(0)]
+    [MinLength(0, ErrorMessage = "Cannot be lower than 0!")]
+    [MaxLength(5, ErrorMessage = "Cannot be bigger than 5!")]
     public int Score { get; set; }
 }

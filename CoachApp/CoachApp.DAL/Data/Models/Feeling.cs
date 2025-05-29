@@ -9,6 +9,7 @@ public class Feeling
     public int FeelingID { get; set; }
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
+    [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
     public string FeelingName { get; set; } = null!;
     public List<FeelingForActivity> FeelingsForActivities { get; set; } = new List<FeelingForActivity>();
 }

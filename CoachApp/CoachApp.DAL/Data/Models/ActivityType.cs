@@ -9,6 +9,7 @@ public class ActivityType
     public int ActivityTypeID { get; set; }
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
+    [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
     public string ActivityName { get; set; } = null!;
     public List<Activity> Activities { get; set; } = new List<Activity>();
 }
