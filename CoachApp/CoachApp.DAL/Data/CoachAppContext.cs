@@ -1,9 +1,11 @@
 ﻿using CoachApp.DAL.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachApp.DAL.Data
 {
-    public class CoachAppContext : DbContext
+    public class CoachAppContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public CoachAppContext(DbContextOptions<CoachAppContext> options) : base(options)
         { }

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoachApp.DAL.Data.Models;
 
-public class User
+public class User : IdentityRole<int>
 {
     [Key]
     public int UserID { get; set; }
@@ -28,10 +29,6 @@ public class User
     [StringLength(255)]
     [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
     public string Email { get; set; } = null!;
-    [Column(TypeName = "VARCHAR")]
-    [StringLength(255)]
-    [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
-    public string Password { get; set; } = null!;
     [PersonalData]
     [Column(TypeName = "VARCHAR")]
     [Phone]
