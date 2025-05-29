@@ -10,7 +10,6 @@ using CoachApp.DAL.Data.Repositories.User;
 using CoachApp.DAL.Data.Repositories.UserClient;
 using CoachApp.DAL.Data.Repositories.UserClientFollowUp;
 using CoachApp.DAL.Data.Repositories.UserRole;
-using CoachApp.DAL.Data.Repositories.UserToken;
 
 namespace CoachApp.DAL.Data.UnitOfWork;
 
@@ -28,7 +27,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private IUserClientRepository? _userClientRepository;
     private IUserClientFollowUpRepository? _userClientFollowUpRepository;
     private IUserRoleRepository? _userRoleRepository;
-    private IUserTokenRepository? _userTokenRepository;
 
     public UnitOfWork(CoachAppContext ccontext)
     {
@@ -77,10 +75,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IUserRoleRepository UserRoleRepository
     {
         get { return _userRoleRepository  ??= new UserRoleRepository(context); }
-    }
-    public IUserTokenRepository UserTokenRepository
-    {
-        get { return _userTokenRepository ??= new UserTokenRepository(context); }
     }
 
 

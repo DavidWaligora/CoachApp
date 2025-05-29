@@ -22,7 +22,6 @@ namespace CoachApp.DAL.Data
         public DbSet<UserClient> UserClient { get; set; } = default!;
         public DbSet<UserRole> UserRole { get; set; } = default!;
         public DbSet<UserClientFollowUp> UserClientFollowUp { get; set; } = default!;
-        public DbSet<UserToken> UserToken { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -35,13 +34,23 @@ namespace CoachApp.DAL.Data
             modelBuilder.Entity<FeelingForActivity>().ToTable("FeelingForActivity");
             modelBuilder.Entity<FocusPoint>().ToTable("FocusPoint");
             modelBuilder.Entity<FocusPointPeriod>().ToTable("FocusPointsPeriod");
-            modelBuilder.Entity<User>().ToTable("User")
-                .HasIndex(x=>x.UserName)
-                .IsUnique(); // ok
+            modelBuilder.Entity<User>().ToTable("User");
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.UserName)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.PhoneNumber)
+                .IsUnique();
+                
             modelBuilder.Entity<UserClient>().ToTable("UserClient");
             modelBuilder.Entity<UserRole>().ToTable("UserRole");
             modelBuilder.Entity<UserClientFollowUp>().ToTable("UserClientFollowUp");
-            modelBuilder.Entity<UserToken>().ToTable("UserToken");
 
 
             // Additional configurations can be added here, such as relationships, indexes, etc.
@@ -114,10 +123,6 @@ namespace CoachApp.DAL.Data
                 .WithMany(u => u.UserClientFollowUps)
                 .HasForeignKey(ucf => ucf.UserID);
 
-            modelBuilder.Entity<UserToken>()
-                .HasOne(x=>x.User)
-                .WithMany(x=>x.UserTokens)
-                .HasForeignKey(x => x.UserID);
         }
 
     }

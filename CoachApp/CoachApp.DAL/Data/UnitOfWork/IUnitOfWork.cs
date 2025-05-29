@@ -9,7 +9,6 @@ using CoachApp.DAL.Data.Repositories.User;
 using CoachApp.DAL.Data.Repositories.UserClient;
 using CoachApp.DAL.Data.Repositories.UserClientFollowUp;
 using CoachApp.DAL.Data.Repositories.UserRole;
-using CoachApp.DAL.Data.Repositories.UserToken;
 
 namespace CoachApp.DAL.Data.UnitOfWork;
 
@@ -26,6 +25,5 @@ public interface IUnitOfWork
     public IUserClientRepository UserClientRepository { get; }
     public IUserClientFollowUpRepository UserClientFollowUpRepository { get; }
     public IUserRoleRepository UserRoleRepository { get; }
-    public IUserTokenRepository UserTokenRepository { get; }
     public Task SaveChangesAsync();
 }

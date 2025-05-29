@@ -2,6 +2,7 @@ namespace CoachApp.API
 {
     public class WeatherForecast
     {
+        public int WeatherID { get; set; }
         public DateOnly Date { get; set; }
 
         public int TemperatureC { get; set; }
