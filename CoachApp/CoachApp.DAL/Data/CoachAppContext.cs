@@ -118,8 +118,6 @@ namespace CoachApp.DAL.Data
                 .HasOne(x=>x.User)
                 .WithMany(x=>x.UserTokens)
                 .HasForeignKey(x => x.UserID);
-
-
         }
 
     }

@@ -6,8 +6,6 @@ namespace CoachApp.DAL.Data.Models;
 
 public class User : IdentityUser<int>
 {
-    [Key]
-    public int UserID { get; set; }
     [PersonalData]
     [Required]
     [Column(TypeName = "VARCHAR")]
