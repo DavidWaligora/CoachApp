@@ -9,9 +9,11 @@ public class FocusPoint
     public int FocusPointID { get; set; }
     [Column(TypeName = "VARCHAR")]
     [StringLength(50)]
+    [MaxLength(50, ErrorMessage = "Cannot exceed 50 characters!")]
     public string FocusPointName { get; set; } = null!;
     [Column(TypeName = "VARCHAR")]
     [StringLength(255)]
+    [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
     public string Description { get; set; } = null!;
     public int FocusPointPeriodID { get; set; }
     public FocusPointPeriod FocusPointPeriod { get; set; } = null!;

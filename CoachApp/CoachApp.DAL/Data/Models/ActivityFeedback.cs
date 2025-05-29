@@ -11,5 +11,6 @@ public class ActivityFeedback
     public Activity Activity { get; set; } = null!;
     [Column(TypeName = "VARCHAR")]
     [StringLength(255)]
+    [MaxLength(255, ErrorMessage = "Cannot exceed 255 characters!")]
     public string Feedback { get; set; } = null!;
 }

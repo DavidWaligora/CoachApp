@@ -14,7 +14,6 @@ public class FeelingForActivity
     public Activity Activity { get; set; } = null!;
     public int FeelingID { get; set; }
     public Feeling Feeling { get; set; } = null!;
-    [MaxLength(5)]
-    [MinLength(0)]
+    [Range(0, 5, ErrorMessage = "Must be between 0 and 5!")]
     public int Score { get; set; }
 }
