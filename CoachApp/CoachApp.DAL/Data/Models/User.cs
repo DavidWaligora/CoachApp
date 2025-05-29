@@ -36,7 +36,7 @@ public class User
     [Column(TypeName = "VARCHAR")]
     [Phone]
     [StringLength(20)]
-    [MaxLength(20, ErrorMessage = "Cannot exceed 255 characters!")]
+    [MaxLength(20, ErrorMessage = "Cannot exceed 20 characters!")]
     public string? PhoneNumber { get; set; }
     public List<UserClient> UserClients { get; set; } = new List<UserClient>();
     public List<UserClient> ClientUserClients { get; set; } = new List<UserClient>();
