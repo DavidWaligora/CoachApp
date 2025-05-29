@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoachApp.DAL.Data.Models;
 
-public class User : IdentityRole<int>
+public class User : IdentityUser<int>
 {
     [Key]
     public int UserID { get; set; }

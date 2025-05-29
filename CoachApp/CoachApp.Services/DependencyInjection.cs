@@ -1,8 +1,5 @@
 ﻿using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Extensions;
-using CoachApp.DAL.Data.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,13 +15,6 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("CoachAppDb")); // Fixed typo in GetConnectionString
         });
         return services;
-    }
-
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
-    {
-        services.AddIdentityCore<User, IdentityRole<int>>()
-                .AddEntityFrameworkStores<CoachAppContext>()
-                .AddDefaultTokenProviders();
     }
 
     public static IServiceProvider AddDatabaseServicesProvider(this IServiceProvider serviceProvider)
