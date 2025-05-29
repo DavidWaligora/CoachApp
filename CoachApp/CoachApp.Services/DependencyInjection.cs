@@ -1,6 +1,7 @@
 ﻿using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Extensions;
 using CoachApp.DAL.Data.Models;
+using CoachApp.Services.MiddleWare;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,12 @@ public static class DependencyInjection
             DbSeeder.SeedDatabase(context);
         }
         return serviceProvider;
+    }
+
+    public static IServiceCollection AddAllNecessartServices(this IServiceCollection services)
+    {
+        services.AddSingleton<UserServices>();
+        return services;
     }
 
 }
