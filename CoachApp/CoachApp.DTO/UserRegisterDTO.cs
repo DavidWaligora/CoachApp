@@ -26,7 +26,7 @@ public record UserRegisterDTO
     [MaxLength(20, ErrorMessage = "Cannot exceed 20 characters!")]
     public string? PhoneNumber { get; set; } = null;
     [Required]
-    public required string Password { get; set; }
+    public required string Password1 { get; set; }
     [Required]
     public required string Password2 { get; set; }
 }

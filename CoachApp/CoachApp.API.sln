@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.Services", "CoachA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.DTO", "CoachApp.DTO\CoachApp.DTO.csproj", "{B12F9288-0AF4-49C1-88F9-AF042F6E0A82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.API.Tests", "CoachApp.API.Tests\CoachApp.API.Tests.csproj", "{4D9865B9-3E93-4B39-A57C-52258C3B1662}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.Services.Tests", "CoachApp.Services.Tests\CoachApp.Services.Tests.csproj", "{6B430ED5-81EC-41FD-864E-9B18CBB2796D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{B12F9288-0AF4-49C1-88F9-AF042F6E0A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B12F9288-0AF4-49C1-88F9-AF042F6E0A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B12F9288-0AF4-49C1-88F9-AF042F6E0A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9865B9-3E93-4B39-A57C-52258C3B1662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9865B9-3E93-4B39-A57C-52258C3B1662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9865B9-3E93-4B39-A57C-52258C3B1662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9865B9-3E93-4B39-A57C-52258C3B1662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B430ED5-81EC-41FD-864E-9B18CBB2796D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B430ED5-81EC-41FD-864E-9B18CBB2796D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B430ED5-81EC-41FD-864E-9B18CBB2796D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B430ED5-81EC-41FD-864E-9B18CBB2796D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
