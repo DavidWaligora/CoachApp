@@ -16,14 +16,12 @@ public class UserController : ControllerBase
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private readonly IConfiguration _configuration;
-    private readonly UserServices _userServices;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, UserServices userServices)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
-        _userServices = userServices;
     }
 
     [HttpPost("Login")]
@@ -40,7 +38,7 @@ public class UserController : ControllerBase
 
         if (await _userManager.CheckPasswordAsync(user, loginModel.Password) == false)
         {
-            // Nooit exacte informatie geven: zeg alleen dat combinatie vekeerd is...
+            // Never give exact information: only say that the combination is incorrect...
             ModelState.AddModelError("message", "wrong loginCombination!");
             return BadRequest(loginModel);
         }
@@ -70,7 +68,7 @@ public class UserController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        if (!_userServices.CheckPasswordsAreTheSame(registerModel.Password1, registerModel.Password2))
+        if (!UserServices.CheckPasswordsAreTheSame(registerModel.Password1, registerModel.Password2))
             return BadRequest("The passwords dont match!");
 
         var user = await _userManager.FindByEmailAsync(registerModel.Email);
@@ -93,14 +91,7 @@ public class UserController : ControllerBase
         }
 
 
-        User userToCreate = new()
-        {
-            FirstName = registerModel.FirstName,
-            LastName = registerModel.LastName,
-            UserName = registerModel.UserName,
-            Email = registerModel.Email,
-            PhoneNumber = registerModel.PhoneNumber,
-        };
+        User userToCreate = UserServices.GetUserFromRegisterUserDTO(registerModel);
 
         var result = await _userManager.CreateAsync(userToCreate, registerModel.Password1);
 

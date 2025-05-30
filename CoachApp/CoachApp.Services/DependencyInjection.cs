@@ -33,7 +33,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddAllNecessartServices(this IServiceCollection services)
     {
-        services.AddSingleton<UserServices>();
         return services;
     }
 

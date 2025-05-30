@@ -1,4 +1,5 @@
-﻿using CoachApp.Services.MiddleWare;
+﻿using CoachApp.DTO;
+using CoachApp.Services.MiddleWare;
 using Moq;
 using Xunit;
 
@@ -6,11 +7,6 @@ namespace CoachApp.Services.Tests
 {
     public class UserControllerTests
     {
-        private readonly UserServices _services;
-        public UserControllerTests()
-        {
-            _services = new UserServices();
-        }
 
         [Fact]
         public void CheckPasswordsAreTheSame_ReturnsTrue_WhenPasswordsMatch()
@@ -20,7 +16,7 @@ namespace CoachApp.Services.Tests
             string pw2 = "Password123!";
 
             // Act
-            bool result = _services.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.True(result);
@@ -34,7 +30,7 @@ namespace CoachApp.Services.Tests
             string pw2 = "DifferentPassword!";
 
             // Act
-            bool result = _services.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.False(result);
@@ -48,7 +44,7 @@ namespace CoachApp.Services.Tests
             string pw2 = pw1; // same value
 
             // Act
-            bool result = _services.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.True(result);
@@ -62,10 +58,37 @@ namespace CoachApp.Services.Tests
             string pw2 = Guid.NewGuid().ToString(); // different value
 
             // Act
-            bool result = _services.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.False(result);
+        }
+
+        [Fact]
+        public void GetUserFromRegisterUserDTO_ValidInput_ReturnsUser()
+        {
+            // Arrange
+            var dto = new UserRegisterDTO
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                UserName = "johndoe",
+                Email = "john@example.com",
+                Password1 = "Blabla123*",
+                Password2 = "Blabla123*",
+                PhoneNumber = "1234567890"
+            };
+
+            // Act
+            var result = UserServices.GetUserFromRegisterUserDTO(dto);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("John", result.FirstName);
+            Assert.Equal("Doe", result.LastName);
+            Assert.Equal("johndoe", result.UserName);
+            Assert.Equal("john@example.com", result.Email);
+            Assert.Equal("1234567890", result.PhoneNumber);
         }
     }
 }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.DTO", "CoachApp.DT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.Services.Tests", "CoachApp.Services.Tests\CoachApp.Services.Tests.csproj", "{376CAC63-00CF-4387-9413-901689877207}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachApp.API.Tests", "CoachApp.API.Tests\CoachApp.API.Tests.csproj", "{71792873-259F-4B3C-B6DE-0E76C42F4B21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{376CAC63-00CF-4387-9413-901689877207}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{376CAC63-00CF-4387-9413-901689877207}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{376CAC63-00CF-4387-9413-901689877207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71792873-259F-4B3C-B6DE-0E76C42F4B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71792873-259F-4B3C-B6DE-0E76C42F4B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71792873-259F-4B3C-B6DE-0E76C42F4B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71792873-259F-4B3C-B6DE-0E76C42F4B21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
