@@ -1,4 +1,5 @@
 ﻿using CoachApp.Services.MiddleWare;
+using Moq;
 using Xunit;
 
 namespace CoachApp.Services.Tests
@@ -6,9 +7,9 @@ namespace CoachApp.Services.Tests
     public class UserControllerTests
     {
         private readonly UserServices _services;
-        public UserControllerTests(UserServices services)
+        public UserControllerTests()
         {
-            _services = services;
+            _services = new UserServices();
         }
 
         [Fact]
