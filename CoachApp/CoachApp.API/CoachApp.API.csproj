@@ -10,6 +10,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoachApp.DAL\CoachApp.DAL.csproj" />
     <ProjectReference Include="..\CoachApp.Services\CoachApp.Services.csproj" />
   </ItemGroup>
 </Project>

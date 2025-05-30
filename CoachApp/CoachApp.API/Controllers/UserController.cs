@@ -6,124 +6,117 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace CoachApp.API.Controllers
+namespace CoachApp.API.Controllers;
+
+[ApiController]
+[Authorize]
+[Route("[controller]")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Authorize]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    private UserManager<User> _userManager;
+    private SignInManager<User> _signInManager;
+    private readonly IConfiguration _configuration;
+
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
     {
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
-        private readonly IConfiguration _configuration;
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _configuration = configuration;
+    }
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+    [HttpPost("Login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(UserLoginDTO loginModel)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var user = await _userManager.FindByEmailAsync(loginModel.UserNameOrEmail);
+        if (user == null)
+            user = await _userManager.FindByNameAsync(loginModel.UserNameOrEmail);
+        if (user == null)
+            return BadRequest("Given data is invalid!");
+
+        if (await _userManager.CheckPasswordAsync(user, loginModel.Password) == false)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
+            // Never give exact information: only say that the combination is incorrect...
+            ModelState.AddModelError("message", "wrong loginCombination!");
+            return BadRequest(loginModel);
         }
 
-        [HttpPost("Login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(UserLoginDTO loginModel)
+        var result = await _signInManager.PasswordSignInAsync(user.UserName!, loginModel.Password, false, true);
+
+        if (result.IsLockedOut)
+            ModelState.AddModelError("message", "Account locked!");
+
+        if (result.Succeeded)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var token = TokenService.GetToken(user, _configuration);
 
-            var user = await _userManager.FindByEmailAsync(loginModel.UserNameOrEmail);
-            if (user == null)
-                user = await _userManager.FindByNameAsync(loginModel.UserNameOrEmail);
-            if (user == null)
-                return BadRequest("Given data is invalid!");
-
-            if (await _userManager.CheckPasswordAsync(user, loginModel.Password) == false)
+            return Ok(new
             {
-                // Nooit exacte informatie geven: zeg alleen dat combinatie vekeerd is...
-                ModelState.AddModelError("message", "wrong loginCombination!");
-                return BadRequest(loginModel);
-            }
-
-            var result = await _signInManager.PasswordSignInAsync(user.UserName!, loginModel.Password, false, true);
-
-            if (result.IsLockedOut)
-                ModelState.AddModelError("message", "Account locked!");
-
-            if (result.Succeeded)
-            {
-                var token = TokenService.GetToken(user, _configuration);
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            ModelState.AddModelError("message", "Invalid login try!");
-            return Unauthorized(ModelState);
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+            });
         }
+        ModelState.AddModelError("message", "Invalid login try!");
+        return Unauthorized(ModelState);
+    }
 
-        [HttpPost("Register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(UserRegisterDTO registerModel)
+    [HttpPost("Register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(UserRegisterDTO registerModel)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        if (!UserServices.CheckPasswordsAreTheSame(registerModel.Password1, registerModel.Password2))
+            return BadRequest("The passwords dont match!");
+
+        var user = await _userManager.FindByEmailAsync(registerModel.Email);
+        if (user != null)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (registerModel.Password != registerModel.Password2)
-                return BadRequest("The passwords dont match!");
-
-            var user = await _userManager.FindByEmailAsync(registerModel.Email);
-            if (user != null)
-            {
-                ModelState.AddModelError("message", "User exists with this credentials!");
-                return BadRequest(ModelState);
-            }
-            user = await _userManager.FindByNameAsync(registerModel.UserName);
-            if (user != null)
-            {
-                ModelState.AddModelError("message", "User exists with this credentials!");
-                return BadRequest(ModelState);
-            }
-            user = _userManager.Users.Where(x => x.PhoneNumber == registerModel.PhoneNumber).FirstOrDefault();
-            if (user != null)
-            {
-                ModelState.AddModelError("message", "User exists with this credentials!");
-                return BadRequest(ModelState);
-            }
-
-
-            User userToCreate = new()
-            {
-                FirstName = registerModel.FirstName,
-                LastName = registerModel.LastName,
-                UserName = registerModel.UserName,
-                Email = registerModel.Email,
-                PhoneNumber = registerModel.PhoneNumber,
-            };
-
-            var result = await _userManager.CreateAsync(userToCreate, registerModel.Password);
-
-            if (result.Succeeded)
-            {
-                user = await _userManager.FindByEmailAsync(registerModel.Email);
-                if (user == null)
-                {
-                return BadRequest();
-                }
-                var token = TokenService.GetToken(user!, _configuration);
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-
-            if (result.Errors.Count() > 0)
-            {
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError("message", error.Description);
-            }
+            ModelState.AddModelError("message", "User exists with this credentials!");
+            return BadRequest(ModelState);
+        }
+        user = await _userManager.FindByNameAsync(registerModel.UserName);
+        if (user != null)
+        {
+            ModelState.AddModelError("message", "User exists with this credentials!");
+            return BadRequest(ModelState);
+        }
+        user = _userManager.Users.Where(x => x.PhoneNumber == registerModel.PhoneNumber).FirstOrDefault();
+        if (user != null)
+        {
+            ModelState.AddModelError("message", "User exists with this credentials!");
             return BadRequest(ModelState);
         }
 
+
+        User userToCreate = UserServices.GetUserFromRegisterUserDTO(registerModel);
+
+        var result = await _userManager.CreateAsync(userToCreate, registerModel.Password1);
+
+        if (result.Succeeded)
+        {
+            user = await _userManager.FindByEmailAsync(registerModel.Email);
+            if (user == null)
+            {
+            return BadRequest();
+            }
+            var token = TokenService.GetToken(user!, _configuration);
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+            });
+        }
+
+        if (result.Errors.Count() > 0)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("message", error.Description);
+        }
+        return BadRequest(ModelState);
     }
+
 }
