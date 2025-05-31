@@ -1,11 +1,11 @@
 ﻿using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Extensions;
-using CoachApp.DAL.Data.Models;
 using CoachApp.Services.MiddleWare;
-using Microsoft.AspNetCore.Identity;
+using CoachApp.Services.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CoachApp.Services;
 
@@ -19,7 +19,6 @@ public static class DependencyInjection
         });
         return services;
     }
-
     public static IServiceProvider AddDatabaseServicesProvider(this IServiceProvider serviceProvider)
     {
         using (var scope = serviceProvider.CreateScope())
@@ -33,6 +32,9 @@ public static class DependencyInjection
 
     public static IServiceCollection AddAllNecessartServices(this IServiceCollection services)
     {
+        services.AddSingleton<ITokenServices, TokenServices>();
+        services.AddSingleton<IJWTOptions, JWTOptions>();
+        services.AddSingleton<IJWTOptions>(sp => sp.GetRequiredService<IOptions<JWTOptions>>().Value);
         return services;
     }
 

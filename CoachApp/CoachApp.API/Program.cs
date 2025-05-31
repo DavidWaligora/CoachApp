@@ -1,8 +1,10 @@
 using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Models;
 using CoachApp.Services;
+using CoachApp.Services.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text; // Ensure this namespace is correct based on your project structure
 
@@ -11,8 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Database services registration
 builder.Services.AddDatabaseServices(builder.Configuration);
-
 builder.Services.AddControllers();
+builder.Services.AddAllNecessartServices();
+
+// JWT
+var config = builder.Configuration.GetSection("JWT");
+builder.Services.Configure<JWTOptions>(config);
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -66,7 +74,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAllNecessartServices();
 
 var app = builder.Build();
 

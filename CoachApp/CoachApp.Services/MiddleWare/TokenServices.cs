@@ -1,4 +1,5 @@
 ﻿using CoachApp.DAL.Data.Models;
+using CoachApp.Services.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,18 +8,23 @@ using System.Text;
 
 namespace CoachApp.Services.MiddleWare;
 
-public static class TokenService
+public class TokenServices : ITokenServices
 {
-    public static JwtSecurityToken GetToken(User user, IConfiguration config)
+    private readonly IJWTOptions _jwt;
+    public TokenServices(IJWTOptions jWTOptions)
+    {
+        _jwt = jWTOptions;
+    }
+    public JwtSecurityToken GetToken(User user)
     {
         var authClaims = GetClaims(user);
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
-        var token = GetJwtSecurityToken(authClaims, config, authSigningKey);
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        var token = GetJwtSecurityToken(authClaims, authSigningKey);
 
         return token;
     }
 
-    private static List<Claim> GetClaims(User user)
+    private List<Claim> GetClaims(User user)
     {
         return new()
         {
@@ -28,12 +34,12 @@ public static class TokenService
         };
     }
 
-    private static JwtSecurityToken GetJwtSecurityToken(List<Claim> authClaims, IConfiguration config, SymmetricSecurityKey authSigningKey)
+    private JwtSecurityToken GetJwtSecurityToken(List<Claim> authClaims, SymmetricSecurityKey authSigningKey)
     {
         return new JwtSecurityToken(
-            issuer: config["Jwt:Issuer"],
-            audience: config["Jwt:Audience"],
-            expires: DateTime.UtcNow.AddHours(3),
+            issuer: _jwt.Issuer,
+            audience: _jwt.Audience,
+            expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );

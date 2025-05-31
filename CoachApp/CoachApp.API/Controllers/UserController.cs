@@ -15,13 +15,13 @@ public class UserController : ControllerBase
 {
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
-    private readonly IConfiguration _configuration;
+    private readonly ITokenServices _tokenServices;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _configuration = configuration;
+        _tokenServices = tokenServices;
     }
 
     [HttpPost("Login")]
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
 
         if (result.Succeeded)
         {
-            var token = TokenService.GetToken(user, _configuration);
+            var token = _tokenServices.GetToken(user);
 
             return Ok(new
             {
@@ -102,7 +102,7 @@ public class UserController : ControllerBase
             {
             return BadRequest();
             }
-            var token = TokenService.GetToken(user!, _configuration);
+            var token = _tokenServices.GetToken(user!);
 
             return Ok(new
             {
