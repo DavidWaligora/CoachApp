@@ -14,7 +14,7 @@ namespace CoachApp.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("[controller]")]
-public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, GetUserDataServices userDataServices, IUnitOfWork uow) : ControllerBase
+public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, UserDataServices userDataServices, IUnitOfWork uow) : ControllerBase
 {
     [HttpPost("Login")]
     [AllowAnonymous]
@@ -133,6 +133,7 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
         return Ok(user);
     }
     [HttpPut(Name = "ChangeUserInfo")]
+    [Authorize]
     public async Task<IActionResult> UpdateUserInfoAsync(UpdateUserInfoDTO userInfoToUpdate)
     {
         if (!ModelState.IsValid)
@@ -159,4 +160,32 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
         await uow.SaveChangesAsync();
         return Ok(userInfoToUpdate);
     }
+
+    [HttpPut("UpdatePassword")]
+    [Authorize]
+    public async Task<IActionResult> UpdatePasswordAsync(UpdatePasswordDTO model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrWhiteSpace(userIdStr))
+            return BadRequest("Problem receiving data, please try again.");
+
+        var user = await userManager.FindByIdAsync(userIdStr);
+        if (user == null)
+            return NotFound("User not found.");
+
+        var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("message", error.Description);
+            return BadRequest(ModelState);
+        }
+
+        return Ok("Password updated successfully.");
+    }
+
 }

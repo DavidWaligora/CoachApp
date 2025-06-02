@@ -39,7 +39,7 @@ public static class DependencyInjection
         services.AddSingleton<ITokenServices, TokenServices>();
         services.AddSingleton<IJWTOptions, JWTOptions>();
         services.AddSingleton<IJWTOptions>(sp => sp.GetRequiredService<IOptions<JWTOptions>>().Value);
-        services.AddScoped<GetUserDataServices>();
+        services.AddScoped<UserDataServices>();
         return services;
     }
 
