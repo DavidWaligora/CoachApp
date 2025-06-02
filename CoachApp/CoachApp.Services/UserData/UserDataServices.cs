@@ -5,7 +5,7 @@ using CoachApp.DTO.User;
 using Microsoft.EntityFrameworkCore;
 namespace CoachApp.Services.UserData;
 
-public class GetUserDataServices(CoachAppContext context, IMapper mapper)
+public class UserDataServices(CoachAppContext context, IMapper mapper)
 {
     public async Task<UserInfoDTO?> GetUserInfoByIdAsync(int id)
     {
