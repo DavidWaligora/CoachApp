@@ -7,38 +7,33 @@ using System.Text;
 
 namespace CoachApp.Services.MiddleWare;
 
-public class TokenServices : ITokenServices
+public class TokenServices(IJWTOptions jWTOptions) : ITokenServices
 {
-    private readonly IJWTOptions _jwt;
-    public TokenServices(IJWTOptions jWTOptions)
-    {
-        _jwt = jWTOptions;
-    }
     public JwtSecurityToken GetToken(User user)
     {
         var authClaims = GetClaims(user);
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jWTOptions.Key));
         var token = GetJwtSecurityToken(authClaims, authSigningKey);
 
         return token;
     }
 
-    private List<Claim> GetClaims(User user)
+    private static List<Claim> GetClaims(User user)
     {
-        return new()
-        {
+        return
+        [
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+        ];
     }
 
     private JwtSecurityToken GetJwtSecurityToken(List<Claim> authClaims, SymmetricSecurityKey authSigningKey)
     {
         return new JwtSecurityToken(
-            issuer: _jwt.Issuer,
-            audience: _jwt.Audience,
-            expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
+            issuer: jWTOptions.Issuer,
+            audience: jWTOptions.Audience,
+            expires: DateTime.UtcNow.AddMinutes(jWTOptions.DurationInMinutes),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );

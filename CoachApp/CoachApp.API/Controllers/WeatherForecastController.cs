@@ -8,12 +8,12 @@ namespace CoachApp.API.Controllers
     [Authorize]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
+        private static readonly string[] Summaries =
+        [
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-        List<WeatherForecast> weatherForecasts = new()
-        {
+        ];
+        private readonly List<WeatherForecast> weatherForecasts =
+        [
             new()
             {
                 WeatherID = 1,
@@ -28,26 +28,18 @@ namespace CoachApp.API.Controllers
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             }
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        ];
 
         [HttpGet(Name = "GetWeatherForecast")]
         [AllowAnonymous]
         public IEnumerable<WeatherForecast> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return [.. Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            })];
         }
 
         [HttpGet("{id}", Name = "GetWeatherById")]

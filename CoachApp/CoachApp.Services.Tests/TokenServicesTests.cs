@@ -11,7 +11,7 @@ namespace CoachApp.Services.Tests;
 
 public class TokenServicesTests
 {
-    private IJWTOptions GetJwtOptions()
+    private static JWTOptions GetJwtOptions()
     {
         return new JWTOptions
         {
