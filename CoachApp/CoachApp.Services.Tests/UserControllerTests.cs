@@ -1,7 +1,6 @@
-﻿using CoachApp.DTO;
+﻿using CoachApp.DTO.User;
 using CoachApp.Services.MiddleWare;
 using Moq;
-using Xunit;
 
 namespace CoachApp.Services.Tests
 {
