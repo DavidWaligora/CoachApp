@@ -1,5 +1,5 @@
 ﻿using CoachApp.DAL.Data.Models;
-using CoachApp.DTO;
+using CoachApp.DTO.User;
 
 namespace CoachApp.Services.MiddleWare;
 

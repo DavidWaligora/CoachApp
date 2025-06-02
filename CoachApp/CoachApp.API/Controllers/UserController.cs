@@ -1,10 +1,12 @@
 ﻿using CoachApp.DAL.Data.Models;
-using CoachApp.DTO;
+using CoachApp.DTO.User;
 using CoachApp.Services.MiddleWare;
+using CoachApp.Services.UserData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CoachApp.API.Controllers;
 
@@ -16,12 +18,14 @@ public class UserController : ControllerBase
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;
     private readonly ITokenServices _tokenServices;
+    private GetUserDataServices _userDataServices;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, GetUserDataServices userDataServices)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenServices = tokenServices;
+        _userDataServices = userDataServices;
     }
 
     [HttpPost("Login")]
@@ -118,5 +122,30 @@ public class UserController : ControllerBase
         }
         return BadRequest(ModelState);
     }
+
+    [HttpGet(Name = "GetUserInfo")]
+    [Authorize]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        // Try to get the user ID from claims
+        var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(identity) || !int.TryParse(identity, out int userId))
+        {
+            return BadRequest("Problem receiving data, please try again.");
+        }
+
+        // Call the service to get user info
+        UserInfoDTO? user = await _userDataServices.GetUserInfoByIDAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        return Ok(user);
+    }
+
+
 
 }

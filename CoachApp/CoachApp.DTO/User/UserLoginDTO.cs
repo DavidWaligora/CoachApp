@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoachApp.DTO;
+namespace CoachApp.DTO.User;
 public record UserLoginDTO
 {
     [Required(ErrorMessage = "Email or UserName is required!")]

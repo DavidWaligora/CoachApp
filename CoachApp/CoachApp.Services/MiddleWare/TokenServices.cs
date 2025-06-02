@@ -1,6 +1,5 @@
 ﻿using CoachApp.DAL.Data.Models;
 using CoachApp.Services.Options;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
