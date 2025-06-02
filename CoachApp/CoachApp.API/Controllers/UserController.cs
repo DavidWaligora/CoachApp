@@ -1,4 +1,5 @@
 ﻿using CoachApp.DAL.Data.Models;
+using CoachApp.DAL.Data.UnitOfWork;
 using CoachApp.DTO.User;
 using CoachApp.Services.MiddleWare;
 using CoachApp.Services.UserData;
@@ -13,7 +14,7 @@ namespace CoachApp.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("[controller]")]
-public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, GetUserDataServices userDataServices) : ControllerBase
+public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, GetUserDataServices userDataServices, IUnitOfWork uow) : ControllerBase
 {
     [HttpPost("Login")]
     [AllowAnonymous]
@@ -54,7 +55,7 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
 
     [HttpPost("Register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register(UserRegisterDTO registerModel)
+    public async Task<IActionResult> RegisterAsync(UserRegisterDTO registerModel)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -111,7 +112,7 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
 
     [HttpGet(Name = "GetUserInfo")]
     [Authorize]
-    public async Task<IActionResult> GetUserInfo()
+    public async Task<IActionResult> GetUserInfoAsync()
     {
         // Try to get the user ID from claims
         var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -122,7 +123,7 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
         }
 
         // Call the service to get user info
-        UserInfoDTO? user = await userDataServices.GetUserInfoByIDAsync(userId);
+        UserInfoDTO? user = await userDataServices.GetUserInfoByIdAsync(userId);
 
         if (user == null)
         {
@@ -131,7 +132,31 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
 
         return Ok(user);
     }
+    [HttpPut(Name = "ChangeUserInfo")]
+    public async Task<IActionResult> UpdateUserInfoAsync(UpdateUserInfoDTO userInfoToUpdate)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
+        var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrWhiteSpace(identity) || !int.TryParse(identity, out int userId))
+        {
+            return BadRequest("Problem receiving data, please try again.");
+        }
+        DAL.Data.Models.User? user = await uow.UserRepository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
 
+        user.PhoneNumber = userInfoToUpdate.PhoneNumber;
+        user.Email = userInfoToUpdate.Email;
+        user.UserName = userInfoToUpdate.UserName;
+        user.FirstName = userInfoToUpdate.FirstName;
+        user.LastName = userInfoToUpdate.LastName;
 
+        uow.UserRepository.Update(user);
+        await uow.SaveChangesAsync();
+        return Ok(userInfoToUpdate);
+    }
 }

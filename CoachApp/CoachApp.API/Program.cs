@@ -102,7 +102,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAutoMapper(typeof(Mapper));
 
 var app = builder.Build();
 

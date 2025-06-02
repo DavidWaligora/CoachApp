@@ -1,5 +1,6 @@
 ﻿using CoachApp.DAL.Data;
 using CoachApp.DAL.Data.Extensions;
+using CoachApp.DAL.Data.UnitOfWork;
 using CoachApp.Services.MiddleWare;
 using CoachApp.Services.Options;
 using CoachApp.Services.UserData;
@@ -33,6 +34,8 @@ public static class DependencyInjection
 
     public static IServiceCollection AddAllNecessartServices(this IServiceCollection services)
     {
+        services.AddAutoMapper(typeof(Mapper));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<ITokenServices, TokenServices>();
         services.AddSingleton<IJWTOptions, JWTOptions>();
         services.AddSingleton<IJWTOptions>(sp => sp.GetRequiredService<IOptions<JWTOptions>>().Value);

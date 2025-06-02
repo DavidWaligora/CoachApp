@@ -7,7 +7,7 @@ namespace CoachApp.Services.UserData;
 
 public class GetUserDataServices(CoachAppContext context, IMapper mapper)
 {
-    public async Task<UserInfoDTO?> GetUserInfoByIDAsync(int id)
+    public async Task<UserInfoDTO?> GetUserInfoByIdAsync(int id)
     {
         return await context.User
             .Where(x => x.Id == id)
