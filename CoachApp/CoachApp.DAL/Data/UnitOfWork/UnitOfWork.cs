@@ -8,6 +8,7 @@ using CoachApp.DAL.Data.Repositories.FocusPoint;
 using CoachApp.DAL.Data.Repositories.FocusPointPeriod;
 using CoachApp.DAL.Data.Repositories.User;
 using CoachApp.DAL.Data.Repositories.UserClient;
+using CoachApp.DAL.Data.Repositories.UserClientAskPermission;
 using CoachApp.DAL.Data.Repositories.UserClientFollowUp;
 using CoachApp.DAL.Data.Repositories.UserRole;
 
@@ -23,10 +24,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private IFeelingForActivityRepository? _feelingForActivityRepository;
     private IFocusPointRepository? _focusPointRepository;
     private IFocusPointPeriodRepository? _focusPointPeriodRepository;
-    private IUserRepository? _userRepository;
     private IUserClientRepository? _userClientRepository;
     private IUserClientFollowUpRepository? _userClientFollowUpRepository;
     private IUserRoleRepository? _userRoleRepository;
+    private IUserClientAskPermissionRepository? _userClientAskPermissionRepository;
 
     public UnitOfWork(CoachAppContext ccontext)
     {
@@ -60,10 +61,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     {
         get { return _focusPointPeriodRepository ??= new FocusPointPeriodRepository(context); }
     }
-    public IUserRepository UserRepository
-    {
-        get { return _userRepository ??= new UserRepository(context); }
-    }
     public IUserClientRepository UserClientRepository
     {
         get { return _userClientRepository  ??= new UserClientRepository(context); }
@@ -75,6 +72,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IUserRoleRepository UserRoleRepository
     {
         get { return _userRoleRepository  ??= new UserRoleRepository(context); }
+    }
+    public IUserClientAskPermissionRepository UserClientAskPermissionRepository
+    {
+        get { return _userClientAskPermissionRepository  ??= new UserClientAskPermissionRepository(context); }
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using CoachApp.DAL.Data.Models;
+using CoachApp.DAL.Data.Repositories.UserClientAskPermission;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace CoachApp.DAL.Data
         public DbSet<UserClient> UserClient { get; set; } = default!;
         public DbSet<UserRole> UserRole { get; set; } = default!;
         public DbSet<UserClientFollowUp> UserClientFollowUp { get; set; } = default!;
+        public DbSet<UserClientAskPermission> UserClientAskPermission { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -35,6 +37,7 @@ namespace CoachApp.DAL.Data
             modelBuilder.Entity<FocusPoint>().ToTable("FocusPoint");
             modelBuilder.Entity<FocusPointPeriod>().ToTable("FocusPointsPeriod");
             modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<UserClientAskPermission>().ToTable("UserClientAskPermission");
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.UserName)
@@ -42,18 +45,17 @@ namespace CoachApp.DAL.Data
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.Email)
-                .IsUnique();
+                .IsUnique()
+                .HasFilter("[Email] IS NOT NULL");
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.PhoneNumber)
-                .IsUnique();
-                
+                .IsUnique()
+                .HasFilter("[PhoneNumber] IS NOT NULL");
+
             modelBuilder.Entity<UserClient>().ToTable("UserClient");
             modelBuilder.Entity<UserRole>().ToTable("UserRole");
             modelBuilder.Entity<UserClientFollowUp>().ToTable("UserClientFollowUp");
-
-
-            // Additional configurations can be added here, such as relationships, indexes, etc.
 
 
             modelBuilder.Entity<UserClient>()
@@ -69,19 +71,19 @@ namespace CoachApp.DAL.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Activity>()
-                .HasOne(a=>a.ActivityType)
-                .WithMany(at=>at.Activities)
+                .HasOne(a => a.ActivityType)
+                .WithMany(at => at.Activities)
                 .HasForeignKey(at => at.ActivityTypeID);
 
             modelBuilder.Entity<Activity>()
-                .HasOne(uc=>uc.UserClient)
+                .HasOne(uc => uc.UserClient)
                 .WithMany(UserClient => UserClient.Activities)
                 .HasForeignKey(uc => uc.UserClientID);
 
             modelBuilder.Entity<Activity>()
                 .HasOne(fpp => fpp.ActivityFeedback)
                 .WithOne(af => af.Activity)
-                .HasForeignKey<ActivityFeedback>(af=>af.ActivityFeedbackID);
+                .HasForeignKey<ActivityFeedback>(af => af.ActivityFeedbackID);
 
             modelBuilder.Entity<Activity>()
                 .HasOne(af => af.ActivityFeedback)
@@ -89,7 +91,7 @@ namespace CoachApp.DAL.Data
                 .HasForeignKey<ActivityFeedback>(af => af.ActivityFeedbackID);
 
             modelBuilder.Entity<FeelingForActivity>()
-                .HasOne(x=>x.Activity)
+                .HasOne(x => x.Activity)
                 .WithMany(a => a.FeelingsForActivity)
                 .HasForeignKey(x => x.ActivityID);
 
@@ -122,6 +124,24 @@ namespace CoachApp.DAL.Data
                 .HasOne(ucf => ucf.User)
                 .WithMany(u => u.UserClientFollowUps)
                 .HasForeignKey(ucf => ucf.UserID);
+
+            modelBuilder.Entity<UserClientAskPermission>()
+                .HasOne(ur => ur.UserRole)
+                .WithMany(ur => ur.UserClientAskPermissions)
+                .HasForeignKey(ur => ur.UserRoleID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserClientAskPermission>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.UserClientAskPermissions)
+                .HasForeignKey(uca => uca.UserID)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserClientAskPermission>()
+                .HasOne(c => c.Client)
+                .WithMany(c => c.ClientUserClientAskPermissions)
+                .HasForeignKey(ca => ca.ClientID)
+                 .OnDelete(DeleteBehavior.Restrict);
 
         }
 

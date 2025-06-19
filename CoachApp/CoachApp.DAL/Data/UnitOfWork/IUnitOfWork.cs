@@ -7,6 +7,7 @@ using CoachApp.DAL.Data.Repositories.FocusPoint;
 using CoachApp.DAL.Data.Repositories.FocusPointPeriod;
 using CoachApp.DAL.Data.Repositories.User;
 using CoachApp.DAL.Data.Repositories.UserClient;
+using CoachApp.DAL.Data.Repositories.UserClientAskPermission;
 using CoachApp.DAL.Data.Repositories.UserClientFollowUp;
 using CoachApp.DAL.Data.Repositories.UserRole;
 
@@ -21,9 +22,9 @@ public interface IUnitOfWork
     public IFeelingForActivityRepository FeelingForActivityRepository { get; }
     public IFocusPointRepository FocusPointRepository { get; }
     public IFocusPointPeriodRepository FocusPointPeriodRepository { get; }
-    public IUserRepository UserRepository { get; }
     public IUserClientRepository UserClientRepository { get; }
     public IUserClientFollowUpRepository UserClientFollowUpRepository { get; }
     public IUserRoleRepository UserRoleRepository { get; }
+    public IUserClientAskPermissionRepository UserClientAskPermissionRepository { get; }
     public Task SaveChangesAsync();
 }

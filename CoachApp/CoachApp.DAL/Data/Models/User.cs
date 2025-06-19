@@ -38,5 +38,9 @@ public class User : IdentityUser<int>
     public override string? PhoneNumber { get; set; }
     public List<UserClient> UserClients { get; set; } = [];
     public List<UserClient> ClientUserClients { get; set; } = [];
+    public List<UserClientAskPermission> UserClientAskPermissions { get; set; } = [];
+    public List<UserClientAskPermission> ClientUserClientAskPermissions { get; set; } = [];
+
+
     public List<UserClientFollowUp> UserClientFollowUps { get; set; } = [];
 }
