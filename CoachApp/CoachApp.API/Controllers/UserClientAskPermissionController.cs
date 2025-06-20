@@ -47,6 +47,10 @@ public class UserClientAskPermissionController(UserManager<User> userManager, IU
         {
             uow.UserClientAskPermissionRepository.Update(permission);
             await uow.SaveChangesAsync();
+            if (choice)
+            {
+                await AddUserClientWhenAccepted(user.Id, userId, permission.UserRoleID);
+            }
             return Ok("Permission changed successfully.");
         }
         catch (Exception ex)
@@ -58,17 +62,40 @@ public class UserClientAskPermissionController(UserManager<User> userManager, IU
 
     }
 
+    private async Task AddUserClientWhenAccepted(int userID, int clientID, int? userRoleID)
+    {
+
+        try
+        {
+            var existingUserClient = await uow.UserClientRepository.GetAllAsync();
+            if (existingUserClient != null && existingUserClient.Any(x => x.UserID == userID && x.ClientID == clientID))
+            {
+                return; // UserClient already exists, no need to add again
+            }
+            // If it doesn't exist, we can proceed to add the new UserClient
+
+            UserClient newUserClient = new()
+            {
+                UserID = userID,
+                ClientID = clientID,
+                UserRoleID = userRoleID,
+            };
+            await uow.UserClientRepository.AddAsync(newUserClient);
+            await uow.SaveChangesAsync();
+
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (not implemented here)
+            throw new Exception("Problem checking existing UserClient.", ex);
+        }
+    }
+
+
     [HttpPost(Name = "AddAsClient")]
     [Authorize]
     public async Task<IActionResult> AskPermissionAsync(string userName, int? userRoleID)
     {
-        //todo
-        //var role = await uow.UserRoleRepository.GetByIdAsync(userRoleID); // Use .Value to access the int value
-        //if (role == null)
-        //{
-        //    return BadRequest("Could not find the role");
-        //}
-
         var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrWhiteSpace(identity) || !int.TryParse(identity, out int userId))
