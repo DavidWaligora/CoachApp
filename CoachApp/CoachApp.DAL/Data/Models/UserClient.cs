@@ -15,13 +15,13 @@ public class UserClient
     public User User { get; set; } = null!;
     [ForeignKey("ClientID")]
     public User Client { get; set; } = null!;
-    public List<UserClientFollowUp> UserClientFollowUps { get; set; } = new List<UserClientFollowUp>();
+    public List<UserClientFollowUp> UserClientFollowUps { get; set; } = [];
     public int UserRoleID { get; set; }
     public UserRole UserRole { get; set; } = null!;
     [Precision(0)]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     [Precision(0)]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Activity> Activities { get; set; } = new List<Activity>();
-    public List<FocusPointPeriod> FocusPointPeriods { get; set; } = new List<FocusPointPeriod>();
+    public List<Activity> Activities { get; set; } = [];
+    public List<FocusPointPeriod> FocusPointPeriods { get; set; } = [];
 }

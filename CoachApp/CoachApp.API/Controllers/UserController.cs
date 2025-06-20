@@ -8,17 +8,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace CoachApp.API.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("[controller]")]
-public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, UserDataServices userDataServices, IUnitOfWork uow) : ControllerBase
+public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenServices tokenServices, UserDataServices userDataServices, IUnitOfWork uow) : ControllerBase, IUserController
 {
     [HttpPost("Login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login(UserLoginDTO loginModel)
+    public async Task<IActionResult> LoginAsync(UserLoginDTO loginModel)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -132,7 +133,7 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
 
         return Ok(user);
     }
-    [HttpPut(Name = "ChangeUserInfo")]
+    [HttpPut("UpdateUserInfo")]
     [Authorize]
     public async Task<IActionResult> UpdateUserInfoAsync(UpdateUserInfoDTO userInfoToUpdate)
     {
@@ -140,11 +141,11 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
             return BadRequest(ModelState);
 
         var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrWhiteSpace(identity) || !int.TryParse(identity, out int userId))
+        if (string.IsNullOrWhiteSpace(identity))
         {
             return BadRequest("Problem receiving data, please try again.");
         }
-        DAL.Data.Models.User? user = await uow.UserRepository.GetByIdAsync(userId);
+        User? user = await userManager.FindByIdAsync(identity);
         if (user == null)
         {
             return NotFound("User not found.");
@@ -156,9 +157,21 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
         user.FirstName = userInfoToUpdate.FirstName;
         user.LastName = userInfoToUpdate.LastName;
 
-        uow.UserRepository.Update(user);
+        var result = await userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
+
         await uow.SaveChangesAsync();
-        return Ok(userInfoToUpdate);
+        return Ok(new
+        {
+            user.UserName,
+            user.Email,
+            user.PhoneNumber,
+            user.FirstName,
+            user.LastName
+        });
     }
 
     [HttpPut("UpdatePassword")]
@@ -188,4 +201,10 @@ public class UserController(UserManager<User> userManager, SignInManager<User> s
         return Ok("Password updated successfully.");
     }
 
+    [HttpDelete(Name = "DeleteUser")]
+    [Authorize]
+    public Task<IActionResult> DeleteUserInfoAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
