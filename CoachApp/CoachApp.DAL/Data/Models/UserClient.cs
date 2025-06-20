@@ -16,8 +16,8 @@ public class UserClient
     [ForeignKey("ClientID")]
     public User Client { get; set; } = null!;
     public List<UserClientFollowUp> UserClientFollowUps { get; set; } = [];
-    public int UserRoleID { get; set; }
-    public UserRole UserRole { get; set; } = null!;
+    public int? UserRoleID { get; set; }
+    public UserRole? UserRole { get; set; }
     [Precision(0)]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     [Precision(0)]
