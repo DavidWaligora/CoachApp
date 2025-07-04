@@ -3,6 +3,7 @@ using CoachApp.DAL.Data.Extensions;
 using CoachApp.DAL.Data.UnitOfWork;
 using CoachApp.Services.MiddleWare;
 using CoachApp.Services.Options;
+using CoachApp.Services.UserClientData;
 using CoachApp.Services.UserData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,7 @@ public static class DependencyInjection
         services.AddSingleton<IJWTOptions, JWTOptions>();
         services.AddSingleton<IJWTOptions>(sp => sp.GetRequiredService<IOptions<JWTOptions>>().Value);
         services.AddScoped<UserDataServices>();
+        services.AddScoped<UserClientDataServices>();
         return services;
     }
 

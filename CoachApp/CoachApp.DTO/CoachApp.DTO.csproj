@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UserClient\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,5 @@
 ﻿using CoachApp.DTO.User;
 using CoachApp.Services.MiddleWare;
-using Moq;
 
 namespace CoachApp.Services.Tests
 {
