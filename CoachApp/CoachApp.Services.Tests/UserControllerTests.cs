@@ -1,5 +1,5 @@
 ﻿using CoachApp.DTO.User;
-using CoachApp.Services.MiddleWare;
+using CoachApp.Services.UserClientData;
 using Moq;
 
 namespace CoachApp.Services.Tests
@@ -15,7 +15,7 @@ namespace CoachApp.Services.Tests
             string pw2 = "Password123!";
 
             // Act
-            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserClientDataServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.True(result);
@@ -29,7 +29,7 @@ namespace CoachApp.Services.Tests
             string pw2 = "DifferentPassword!";
 
             // Act
-            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserClientDataServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.False(result);
@@ -43,7 +43,7 @@ namespace CoachApp.Services.Tests
             string pw2 = pw1; // same value
 
             // Act
-            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserClientDataServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.True(result);
@@ -57,7 +57,7 @@ namespace CoachApp.Services.Tests
             string pw2 = Guid.NewGuid().ToString(); // different value
 
             // Act
-            bool result = UserServices.CheckPasswordsAreTheSame(pw1, pw2);
+            bool result = UserClientDataServices.CheckPasswordsAreTheSame(pw1, pw2);
 
             // Assert
             Assert.False(result);
@@ -79,7 +79,7 @@ namespace CoachApp.Services.Tests
             };
 
             // Act
-            var result = UserServices.GetUserFromRegisterUserDTO(dto);
+            var result = UserClientDataServices.GetUserFromRegisterUserDTO(dto);
 
             // Assert
             Assert.NotNull(result);
