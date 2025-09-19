@@ -57,7 +57,7 @@ public class UserClientController(UserClientDataServices userClientDataServices)
         // get all usernames
         try
         {
-            List<string?> userNames = await userClientDataServices.GetClientsWhereIsCoach(userId);
+            List<string?> userNames = await userClientDataServices.GetClientsWhereIsCoachAsync(userId);
             if (userNames == null || userNames.Count == 0)
             {
                 return NotFound("No clients found for this user.");

@@ -14,4 +14,8 @@
     <Folder Include="UserClient\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CoachApp.DAL\CoachApp.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

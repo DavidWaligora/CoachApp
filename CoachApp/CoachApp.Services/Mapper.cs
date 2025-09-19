@@ -8,5 +8,6 @@ public class Mapper : Profile
     public Mapper()
     {
         CreateMap<DAL.Data.Models.User, UserInfoDTO>();
+        CreateMap<DAL.Data.Models.Activity, DTO.Activity.ActivityDTO>();
     }
 }

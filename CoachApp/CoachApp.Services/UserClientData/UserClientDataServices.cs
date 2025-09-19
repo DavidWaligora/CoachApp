@@ -14,11 +14,20 @@ public class UserClientDataServices(CoachAppContext context)
 
         return result;
     }
-    public async Task<List<string?>> GetClientsWhereIsCoach(int userId)
+    public async Task<List<string?>> GetClientsWhereIsCoachAsync(int userId)
     {
         List<string?> result = await context.UserClient
             .Where(x => x.UserID == userId)
             .Select(x => x.Client.UserName)
+            .ToListAsync();
+
+        return result;
+    }
+    public async Task<List<int>?> GetClientsIdsWhereIsCoachAsync(int coachId,int clientId)
+    {
+        List<int>? result = await context.UserClient
+            .Where(x => x.UserID == coachId && x.UserClientID == clientId)
+            .Select(x => x.ClientID)
             .ToListAsync();
 
         return result;
