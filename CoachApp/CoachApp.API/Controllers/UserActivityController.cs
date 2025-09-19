@@ -54,7 +54,7 @@ namespace CoachApp.API.Controllers
                 }
 
 
-                await uow.ActivityRepository.AddAsync(new Activity()
+                await uow.ActivityRepository.AddAsync(new DAL.Data.Models.Activity()
                 {
                     ActivityTypeID = activity.ActivityTypeID,
                     UserClientID = activity.UserClientID,
