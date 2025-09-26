@@ -38,7 +38,8 @@ namespace CoachApp.API.Controllers
             {
                 var userClient = await userDataServices.GetUserInfoByIdAsync(activity.UserClientID);
 
-                if (userClient == null) {
+                if (userClient == null)
+                {
                     return BadRequest("User not found");
                 }
 
@@ -131,6 +132,52 @@ namespace CoachApp.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Shitty message");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("RemoveActivityFromUser")]
+        public async Task<IActionResult> RemoveActivityFromUser(int activityID)
+        {
+            var identity = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrWhiteSpace(identity) || !int.TryParse(identity, out int userId))
+            {
+                return BadRequest("Invalid user identity.");
+            }
+
+            var userActivity = await uow.ActivityRepository.GetByIdAsync(activityID);
+            if (userActivity == null)
+            {
+                return NotFound("Activity not found.");
+            }
+
+            try
+            {
+                // Case 1: Activity belongs directly to the user
+                if (userActivity.UserClientID == userId)
+                {
+                    await uow.ActivityRepository.DeleteByIdAsync(activityID);
+                    await uow.SaveChangesAsync();
+                    return Ok("Activity removed successfully.");
+                }
+
+                // Case 2: User is a coach of the client who owns this activity
+                var coachedClients = await userClientDataServices.GetClientsWhereIsCoachAsync(userId);
+                if (coachedClients != null &&
+                    coachedClients.Any(c => c.Contains(userActivity.UserClient.User.UserName!)))
+                {
+                    await uow.ActivityRepository.DeleteByIdAsync(activityID);
+                    await uow.SaveChangesAsync();
+                    return Ok("Activity removed successfully.");
+                }
+
+                // Case 3: Not authorized
+                return Forbid("You are not authorized to remove this activity.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

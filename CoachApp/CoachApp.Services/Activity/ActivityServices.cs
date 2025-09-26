@@ -21,5 +21,17 @@ namespace CoachApp.Services.Activity
 
             return activities;
         }
+
+        public async Task<ActivityDTO?> GetActivityById(int activityID)
+        {
+            // Implementation to retrieve activities for a specific user client where the requester is a coach
+            ActivityDTO? activity = await context.Activity
+                .Where(x => x.ActivityID == activityID)
+                .ProjectTo<ActivityDTO>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            return activity;
+        }
+
     }
 }

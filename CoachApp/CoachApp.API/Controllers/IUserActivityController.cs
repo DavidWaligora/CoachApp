@@ -8,5 +8,6 @@ namespace CoachApp.API.Controllers
         Task<ActionResult> AddActivityToUserClientAsync(AddActivityToUserClientDTO activity);
         Task<ActionResult<List<ActivityDTO>>> GetAllActivitiesFromUserClientWhereIsClientAsync();
         Task<ActionResult<List<ActivityDTO>>> GetAllActivitiesFromUserClientWhereIsCoachAsync(int userClientID);
+        Task<IActionResult> RemoveActivityFromUser(int activityID);
     }
 }
